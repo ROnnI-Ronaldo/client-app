@@ -1,0 +1,24 @@
+.population-preview {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 50px;
+}
+
+@media screen and (max-width: 1200px) {
+  .population-preview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 910px) {
+  .population-preview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .population-preview {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

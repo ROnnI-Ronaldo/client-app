@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import Input from "../../components/Input/Input";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { authenticateUser } from "../../redux/User/userAction";
 
 import "./Auth.css";
 
 const AuthPage = () => {
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+  const [userDataRegister, setUserDataRegister] = useState({
     email: "",
     password: "",
   });
@@ -19,6 +26,13 @@ const AuthPage = () => {
     });
   };
 
+  const onChangeRegister = (e) => {
+    setUserDataRegister({
+      ...userDataRegister,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const loginUser = async (e) => {
     e.preventDefault();
 
@@ -28,15 +42,40 @@ const AuthPage = () => {
     }
 
     axios
-      .post("http://localhost:4000/auth", {
+      .post("https://populate-app-mern.herokuapp.com/auth", {
         email: userData.email,
         password: userData.password,
       })
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        dispatch(authenticateUser(res.data.token));
       })
       .catch((err) => {
-        console.log(err);
+        alert(err.response.data.msg);
+      });
+  };
+
+  const signupUser = async (e) => {
+    e.preventDefault();
+
+    if (!userDataRegister.email || !userDataRegister.password) {
+      //error can be user to show user a message that all fields are required(pass as prop at input component to be more easy for styling)
+      return setError("All fields are required");
+    }
+
+    axios
+      .post("https://populate-app-mern.herokuapp.com/register", {
+        email: userDataRegister.email,
+        password: userDataRegister.password,
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          alert("User created successfully. Login Now");
+        } else {
+          alert(res.msg);
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data.msg);
       });
   };
 
@@ -63,19 +102,22 @@ const AuthPage = () => {
           Login
         </button>
       </form>
-      <form className='signup auth-area'>
+      <form onSubmit={signupUser} className='signup auth-area'>
         <h1>Sign Up</h1>
         <Input
-          onChange={onChange}
+          onChange={onChangeRegister}
           label='email'
           placeholder='Email'
           name='email'
+          value={userDataRegister.email}
         />
         <Input
-          onChange={onChange}
+          onChange={onChangeRegister}
           label='password'
           placeholder='Password'
           name='password'
+          type='password'
+          value={userDataRegister.password}
         />
         <button type='submit' className='signup-button'>
           Sign Up

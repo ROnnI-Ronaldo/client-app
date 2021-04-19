@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import "./App.css";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Nav from "./components/Nav/Nav";
 import Snippet from "./components/Sniper/Sniper";
@@ -12,6 +13,8 @@ const PopulationOverview = lazy(() =>
 );
 
 function App() {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
   return (
     <>
       <Nav />
@@ -19,7 +22,7 @@ function App() {
         <Switch>
           <Suspense fallback={<Snippet />}>
             <Route exact path='/' component={HomePage} />
-            <Route path='/auth' component={AuthPage} />
+            <Route exact path='/auth' component={AuthPage} />
             <Route path='/populationOverview' component={PopulationOverview} />
           </Suspense>
         </Switch>

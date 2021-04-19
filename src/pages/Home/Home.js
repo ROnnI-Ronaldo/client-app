@@ -13,7 +13,7 @@ const HomePage = () => {
   const [year, setYear] = useState(2000);
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/")
+      .get("https://populate-app-mern.herokuapp.com/api/")
       .then((result) => {
         const filterYears = [];
         console.log(result);

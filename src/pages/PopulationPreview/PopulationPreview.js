@@ -17,7 +17,6 @@ const PopulationPreview = (props) => {
   const errorTimeOut = () => {
     setTimeout(() => {
       setShowError(false);
-      props.history.goBack();
     }, 5000);
   };
 
